@@ -1,5 +1,5 @@
 # Trexplorer
-Official github repository for the implemention of Trexplorer.
+Official GitHub repository for the implementation of Trexplorer.
 
 
-The code will be publish upon acceptance.
+The code will be published soon.
