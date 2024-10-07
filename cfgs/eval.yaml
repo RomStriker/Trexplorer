@@ -1,0 +1,14 @@
+resume: ''
+
+# EVALUATION
+eval_only: true
+batch_size: 1
+max_inference_levels: 500
+max_nodes_per_level: 500
+volume_eval: true
+sub_volume_eval: false
+test_sample: []
+
+
+# Dataloader
+mask: true
