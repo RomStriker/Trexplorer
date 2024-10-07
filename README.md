@@ -13,10 +13,24 @@ This repository provides the official implementation of the [Trexplorer: Recurre
 Tubular structures with tree topology such as blood vessels, lung airways, and more are abundant in human anatomy. Tracking these structures with correct topology is crucial for many downstream tasks that help in early detection of conditions such as vascular and pulmonary diseases. Current methods for centerline tracking suffer from predicting topologically incorrect centerlines and complex model pipelines. To mitigate these issues we propose Trexplorer, a recurrent DETR based model that tracks topologically correct centerlines of tubular tree objects in 3D volumes using a simple model pipeline. We demonstrate the model's performance on a publicly available synthetic vessel centerline dataset and show that our model outperforms the state-of-the-art on centerline topology and graph-related metrics, and performs well on detection metrics.
 
 ## Installation
+1. Clone this repository:
+    ```
+    git clone https://github.com/RomStriker/Trexplorer.git
+    ``` 
+2. Install requirements:
+    ```
+    `pip3 install -r requirements.txt`
+    ```
+3. Install PyTorch 2.2 with CUDA 11.8:
+    ```
+    pip install torch==2.2.0 torchvision==0.17.0 torchaudio==2.2.0 --index-url https://download.pytorch.org/whl/cu118
+    ```
 
 ## Training
+Will be updated soon...
 
 ## Evaluation
+Will be updated soon...
 
 ## Publication
 If you use this software in your research, please cite our publication:
