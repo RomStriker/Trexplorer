@@ -19,7 +19,7 @@ Tubular structures with tree topology such as blood vessels, lung airways, and m
     ``` 
 2. Install requirements:
     ```
-    `pip3 install -r requirements.txt`
+    pip install -r requirements.txt
     ```
 3. Install PyTorch 2.2 with CUDA 11.8:
     ```
