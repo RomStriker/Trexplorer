@@ -690,15 +690,20 @@ class Trexplorer:
         annot_reader = LoadAnnotPickle()
         norm = ScaleIntensity(minv=-1.0)
 
-        annot_dir = os.path.join(self.args.data_dir, 'annots_cont_sep_test')
-        msk_dir = os.path.join(self.args.data_dir, 'masks_sep_test')
-        img_dir = os.path.join(self.args.data_dir, 'images_sep_test')
+        annot_dir = os.path.join(self.args.data_dir, 'annots_test')
+        msk_dir = os.path.join(self.args.data_dir, 'masks_test')
+        img_dir = os.path.join(self.args.data_dir, 'images_test')
 
+        tree_id = sample_id.split('-')[1]
+        sample_id = sample_id.split('-')[0]
         img_path = os.path.join(img_dir, sample_id + '.nii.gz')
         msk_path = os.path.join(msk_dir, sample_id + '.nii.gz')
         annot_path = os.path.join(annot_dir, sample_id + '.pickle')
 
         samples = norm(image_reader(img_path)).unsqueeze(0).unsqueeze(0).to(self.args.device)
+        annot = annot_reader(annot_path)
+        for keys in annot:
+            annot[keys] = [annot[keys][tree_id]]
         targets = [annot_reader(annot_path)]
         targets[0]['index'] = sample_id
         masks = image_reader(msk_path).unsqueeze(0).unsqueeze(0)

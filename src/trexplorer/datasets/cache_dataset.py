@@ -25,13 +25,12 @@ from monai.transforms import (
 
 
 def load_datalist(dataset_dir, data_key):
-    annots_type = "annots_cont_"
     if data_key == "training":
-        annots_dir = os.path.join(dataset_dir, annots_type + 'train')
+        annots_dir = os.path.join(dataset_dir, 'annots_train')
         images_dir = os.path.join(dataset_dir, 'images_train')
         masks_dir = os.path.join(dataset_dir, 'masks_train')
     elif data_key == "validation":
-        annots_dir = os.path.join(dataset_dir, annots_type + 'val')
+        annots_dir = os.path.join(dataset_dir, 'annots_val')
         images_dir = os.path.join(dataset_dir, 'images_val')
         masks_dir = os.path.join(dataset_dir, 'masks_val')
     elif data_key == "validation_sv":
@@ -83,7 +82,7 @@ def build_training_transforms(cfg):
 
 
 def build_validation_sv_transforms(cfg):
-    annots_dir = os.path.join(cfg.data_dir, 'annots_cont_val_sub_vol')
+    annots_dir = os.path.join(cfg.data_dir, 'annots_val_sub_vol')
     images_dir = os.path.join(cfg.data_dir, 'images_val_sub_vol')
     masks_dir = os.path.join(cfg.data_dir, 'masks_val_sub_vol')
     image_paths = sorted(glob.glob(os.path.join(images_dir, "*.nii.gz")))

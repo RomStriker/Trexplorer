@@ -41,7 +41,7 @@ num_replace_workers: 2
 
 # Miscellaneous
 resume: ''
-output_dir: ''
+output_dir: models/test
 device: cuda
 seed: 37
 amp: true
