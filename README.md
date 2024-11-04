@@ -30,7 +30,7 @@ Tubular structures with tree topology such as blood vessels, lung airways, and m
 
 ### Data Preparation
 1. Download the [Synthetic Vessel Dataset](https://github.com/giesekow/deepvesselnet/wiki/Datasets/).
-2. Convert the graph vtk files to the required annotation format.
+2. Convert the graph vtk files to the required annotation format [[example](https://github.com/RomStriker/Trexplorer/blob/abfb2296743d5c734476865aff732a7abed13936/docs/example_annotation.pickle)].
 3. Create the following directory structure:
     ```
     Trexplorer
@@ -50,7 +50,7 @@ Tubular structures with tree topology such as blood vessels, lung airways, and m
     │   │   ├── masks_test
     │   │   ├── annots_val_sub_vol.pickle
     ```
-   The '_train', '_val', and '_test' directories contain the training, validation, and test images respectively. The '_val_sub_vol' directory contains the validation images that are used for patch-level evaluation. The 'masks' directories contain the binary masks of the vessel trees. The 'annots' directories contain the annotation files in the required format. The 'annots_val_sub_vol.pickle' file contains the annotations for the validation sub-volume images. 
+   The '_train', '_val', and '_test' directories contain the training, validation, and test images respectively. The '_val_sub_vol' directory contains the validation images that are used for patch-level evaluation. The 'masks' directories contain the binary masks of the vessel trees. The 'annots' directories contain the annotation files in the required format. The 'annots_val_sub_vol.pickle' [[example](https://github.com/RomStriker/Trexplorer/blob/abfb2296743d5c734476865aff732a7abed13936/docs/annots_val_sub_vol.pickle)] file contains the annotations for the validation sub-volume images. 
 
 ### Training
 The training script uses the configuration file `./configs/train.yaml` to set the hyperparameters. To train the model, run the following command from the root directory:
