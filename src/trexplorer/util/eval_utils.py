@@ -28,18 +28,18 @@ def calculate_scores(gt_points, pred_points, gt_num_child=None,
     filtered_dis_gt2pred = np.array(filtered_dis_gt2pred)
 
     # Compute Acc, Recall, F1
-    # ND version does not count duplicate predictions as true positives
+    # Bipartite (BP) version does not count duplicate predictions as true positives
     true_positives = [x for x in dis_gt2pred if x < threshold]
     filtered_true_positives = [x for x in filtered_dis_gt2pred if x < threshold]
     recall = len(true_positives) / len(dis_gt2pred)
-    recall_nd = len(filtered_true_positives) / len(dis_gt2pred)
+    recall_bp = len(filtered_true_positives) / len(dis_gt2pred)
     acc = len([x for x in dis_pred2gt if x < threshold]) / len(dis_pred2gt)
-    acc_nd = len(filtered_true_positives) / len(dis_pred2gt)
+    acc_bp = len(filtered_true_positives) / len(dis_pred2gt)
     r_f = 0
-    r_f_nd = 0
+    r_f_bp = 0
     if acc * recall:
         r_f = 2 * recall * acc / (acc + recall)
-        r_f_nd = 2 * recall_nd * acc_nd / (acc_nd + recall_nd)
+        r_f_bp = 2 * recall_bp * acc_bp / (acc_bp + recall_bp)
 
     # compute the distance and l1-distance of the num of children for predicted bifurcation points
     if gt_num_child is not None and pred_num_child is not None:
@@ -56,9 +56,9 @@ def calculate_scores(gt_points, pred_points, gt_num_child=None,
         else:
             nchild_dist, nchild_dist_l1 = np.nan, np.nan
     else:
-        return acc, acc_nd, recall, recall_nd, r_f, r_f_nd
+        return acc, acc_bp, recall, recall_bp, r_f, r_f_bp
 
-    return acc, acc_nd, recall, recall_nd, r_f, r_f_nd, nchild_dist_l1, nchild_dist
+    return acc, acc_bp, recall, recall_bp, r_f, r_f_bp, nchild_dist_l1, nchild_dist
 
 
 def get_score_nx(preds, targets, elapsed_time, dist=False):
@@ -142,22 +142,22 @@ def get_empty_stats_dict():
 def get_stats_message(stats):
     message = "All points\n"
     message += (f"Acc: {stats['avg_scores'][0]:.3f} \t "
-                f"| \t Acc-ND: {stats['avg_scores'][1]:.3f} \t "
+                f"| \t Acc-BP: {stats['avg_scores'][1]:.3f} \t "
                 f"| \t Recall: {stats['avg_scores'][2]:.3f} \t "
-                f"| \t Recall-ND: {stats['avg_scores'][3]:.3f} \t "
+                f"| \t Recall-BP: {stats['avg_scores'][3]:.3f} \t "
                 f"| \t F1: {stats['avg_scores'][4]:.3f} \t "
-                f"| \t F1-ND: {stats['avg_scores'][5]:.3f} \n ")
+                f"| \t F1-BP: {stats['avg_scores'][5]:.3f} \n ")
     message += (f"| \t Avg Points: {int(stats['avg_num_points'].item())} \t "
                 f"| \t Tot Points: {int(stats['avg_total_points'].item())} \t "
                 f"| \t Avg Time: {stats['avg_elapsed_time'].item():.3f}\n")
 
     message += "Bifur points\n"
     message += (f"Acc: {stats['avg_bifur_scores'][0]:.3f} \t "
-                f"| \t Acc-ND: {stats['avg_bifur_scores'][1]:.3f} \t "
+                f"| \t Acc-BP: {stats['avg_bifur_scores'][1]:.3f} \t "
                 f"| \t Recall: {stats['avg_bifur_scores'][2]:.3f} \t "
-                f"| \t Recall-ND: {stats['avg_bifur_scores'][3]:.3f} \t "
+                f"| \t Recall-BP: {stats['avg_bifur_scores'][3]:.3f} \t "
                 f"| \t F1: {stats['avg_bifur_scores'][4]:.3f} \t "
-                f"| \t F1-ND: {stats['avg_bifur_scores'][5]:.3f} \n "
+                f"| \t F1-BP: {stats['avg_bifur_scores'][5]:.3f} \n "
                 f"| \t NC Error: {stats['avg_bifur_scores'][6]:.3f} \t "
                 f"| \t Avg Points: {int(stats['avg_num_bifur_points'].item())} \t "
                 f"| \t Tot Points: {int(stats['avg_total_bifur_points'].item())} \t "
@@ -169,22 +169,22 @@ def get_stats_message(stats):
 def get_avg_stats_message(stats):
     message = "All points\n"
     message += (f"Acc: {stats['avg_scores'][0]:.3f} \t "
-                f"| \t Acc-ND: {stats['avg_scores'][1]:.3f} \t "
+                f"| \t Acc-BP: {stats['avg_scores'][1]:.3f} \t "
                 f"| \t Recall: {stats['avg_scores'][2]:.3f} \t "
-                f"| \t Recall-ND: {stats['avg_scores'][3]:.3f} \t "
+                f"| \t Recall-BP: {stats['avg_scores'][3]:.3f} \t "
                 f"| \t F1: {stats['avg_scores'][4]:.3f} \t "
-                f"| \t F1-ND: {stats['avg_scores'][5]:.3f} \n ")
+                f"| \t F1-BP: {stats['avg_scores'][5]:.3f} \n ")
     message += (f"| \t Avg Points: {int(stats['avg_num_points'].item())} \t "
                 f"| \t Tot Points: {int(stats['avg_total_points'].item())} \t "
                 f"| \t Avg Time: {stats['avg_elapsed_time'].item():.3f}\n")
 
     message += "Bifur points\n"
     message += (f"Acc: {stats['avg_bifur_scores'][0]:.3f} \t "
-                f"| \t Acc-ND: {stats['avg_bifur_scores'][1]:.3f} \t "
+                f"| \t Acc-BP: {stats['avg_bifur_scores'][1]:.3f} \t "
                 f"| \t Recall: {stats['avg_bifur_scores'][2]:.3f} \t "
-                f"| \t Recall-ND: {stats['avg_bifur_scores'][3]:.3f} \t "
+                f"| \t Recall-BP: {stats['avg_bifur_scores'][3]:.3f} \t "
                 f"| \t F1: {stats['avg_bifur_scores'][4]:.3f} \t "
-                f"| \t F1-ND: {stats['avg_bifur_scores'][5]:.3f} \n "
+                f"| \t F1-BP: {stats['avg_bifur_scores'][5]:.3f} \n "
                 f"| \t NC Error: {stats['avg_bifur_scores'][6]:.3f} \t "
                 f"| \t Avg Points: {int(stats['avg_num_bifur_points'].item())} \t "
                 f"| \t Tot Points: {int(stats['avg_total_bifur_points'].item())} \t "
