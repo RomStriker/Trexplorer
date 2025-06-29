@@ -19,7 +19,7 @@ def build_model(args):
 
     detr_kwargs = {
         'transformer': transformer,
-        'num_classes': num_classes,
+        'num_classes': num_classes - 1,
         'num_queries': args.num_queries,
         'num_prev_pos': args.num_prev_pos,
         'num_dec_layers': args.dec_layers,
