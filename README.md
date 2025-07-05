@@ -1,8 +1,6 @@
 # Trexplorer: Recurrent DETR for Topologically Correct Tree Centerline Tracking
 
-This repository provides the official implementation of the [Trexplorer: Recurrent DETR for Topologically Correct Tree Centerline Tracking](https://github.com/RomStriker/Trexplorer) paper by [Roman Naeem](https://research.chalmers.se/en/person/nroman), [David Hagerman](https://research.chalmers.se/en/person/olzond), [Lennart Svensson](https://research.chalmers.se/person/pale) and [Fredrik Kahl](https://www.chalmers.se/personer/kahlf/). The codebase builds upon [DETR](https://github.com/facebookresearch/detr) and [Trackformer](https://github.com/timmeinhardt/trackformer).
-
-<!-- **As the paper is still under submission this repository will continuously be updated and might at times not reflect the current state of the [arXiv paper](https://arxiv.org/abs/2012.01866).** -->
+This repository provides the official implementation of the [Trexplorer: Recurrent DETR for Topologically Correct Tree Centerline Tracking]([https://github.com/RomStriker/Trexplorer](https://link.springer.com/chapter/10.1007/978-3-031-72120-5_69)) paper by [Roman Naeem](https://research.chalmers.se/en/person/nroman), [David Hagerman](https://research.chalmers.se/en/person/olzond), [Lennart Svensson](https://research.chalmers.se/person/pale) and [Fredrik Kahl](https://www.chalmers.se/personer/kahlf/). The codebase builds upon [DETR](https://github.com/facebookresearch/detr) and [Trackformer](https://github.com/timmeinhardt/trackformer).
 
 <div align="center">
     <img src="docs/architecture.png" alt="arch" width="1000"/>
@@ -10,7 +8,7 @@ This repository provides the official implementation of the [Trexplorer: Recurre
 
 ## Abstract
 
-Tubular structures with tree topology such as blood vessels, lung airways, and more are abundant in human anatomy. Tracking these structures with correct topology is crucial for many downstream tasks that help in early detection of conditions such as vascular and pulmonary diseases. Current methods for centerline tracking suffer from predicting topologically incorrect centerlines and complex model pipelines. To mitigate these issues we propose Trexplorer, a recurrent DETR based model that tracks topologically correct centerlines of tubular tree objects in 3D volumes using a simple model pipeline. We demonstrate the model's performance on a publicly available synthetic vessel centerline dataset and show that our model outperforms the state-of-the-art on centerline topology and graph-related metrics, and performs well on detection metrics.
+Tubular structures with tree topology, such as blood vessels, lung airways, and more, are abundant in human anatomy. Tracking these structures with correct topology is crucial for many downstream tasks that help in the early detection of conditions such as vascular and pulmonary diseases. Current methods for centerline tracking suffer from predicting topologically incorrect centerlines and complex model pipelines. To mitigate these issues, we propose Trexplorer, a recurrent DETR-based model that tracks topologically correct centerlines of tubular tree objects in 3D volumes using a simple model pipeline. We demonstrate the model's performance on a publicly available synthetic vessel centerline dataset and show that our model outperforms the state-of-the-art on centerline topology and graph-related metrics, and performs well on detection metrics.
 
 ## Installation
 1. Clone this repository:
@@ -29,9 +27,12 @@ Tubular structures with tree topology such as blood vessels, lung airways, and m
 ## Training
 
 ### Data Preparation
-1. Download the [Synthetic Vessel Dataset](https://github.com/giesekow/deepvesselnet/wiki/Datasets/).
-2. Convert the graph vtk files to the required annotation format [[example](https://github.com/RomStriker/Trexplorer/blob/abfb2296743d5c734476865aff732a7abed13936/docs/example_annotation.pickle)].
-3. Create the following directory structure:
+1. Download the [Synthetic Vessel Dataset](https://github.com/giesekow/deepvesselnet/wiki/Datasets/) to `./Trexplorer/data`.
+2. Use the provided preprocessing script to convert the data into the required annotation format [[example](https://github.com/RomStriker/Trexplorer/blob/abfb2296743d5c734476865aff732a7abed13936/docs/example_annotation.pickle)] as below:
+    ```
+    python ./Trexplorer/src/trackformer/datasets/utils/preprocess_synthetic_dataset.py ./Trexplorer/data
+    ``` 
+4. Running the script above should give you the following data directory structure:
     ```
     Trexplorer
     ├── data
