@@ -233,6 +233,10 @@ def train(args: Namespace) -> None:
                 stats_message = eval_utils.get_stats_message(stats_reduced)
                 logger.info(stats_message)
 
+                if stats_reduced['avg_scores'][5] > best_f1_nd_dist:
+                    best_f1_nd_dist = stats_reduced['avg_scores'][5]
+                    new_best_nd = True
+
         if utils.get_rank() == 0 and args.output_dir:
             checkpoint_paths = []
             if args.volume_eval:
