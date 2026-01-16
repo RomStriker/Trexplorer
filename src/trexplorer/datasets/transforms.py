@@ -2,6 +2,7 @@ import pickle
 import numpy as np
 import torch
 import re
+import networkx as nx
 from bigtree import find_name, levelordergroup_iter, Node
 from monai.utils import convert_to_tensor, pytorch_after
 from monai.transforms import (
@@ -102,6 +103,18 @@ class CropAndPadd(MapTransform):
             else:
                 raise NotImplementedError
 
+        return d
+
+
+class ComputeImageRanged(MapTransform):
+    def __init__(self, keys):
+        super().__init__(keys)
+
+    def __call__(self, data):
+        d = dict(data)
+        for key in self.keys:
+            d['image_min'] = torch.min(d[key])
+            d['image_max'] = torch.max(d[key])
         return d
 
 
@@ -454,7 +467,7 @@ class ConvertTreeToTargets(Transform):
         data.update(self.extract_sub_tree(data['selected_node']))
         data['past_tr'] = self.generate_past_trajectory_pp(data['selected_node'], data['root_position'])
         data['index'] = data['index']
-        data.pop('selected_node')
+        # data.pop('selected_node')
         data.pop('past_traj_head_node')
 
         return data
@@ -497,7 +510,8 @@ class LoadImageCropsAndTrees(Transform):
                      'tree_id': input['tree_id'],
                      'point_id': input['node_id'],
                      'point_type': input['point_type'],
-                     'dist': input['distance']})
+                     'dist': input['distance'],
+                     'selected_node': convert_to_networkx(nx.DiGraph(), selected_node)})
 
         image = self.crop_and_pad(self.images[input['sample_id']], selected_node.position, -1.0)
         if self.masks is not None:
@@ -542,3 +556,18 @@ class LoadImageCropsAndTreesd(MapTransform):
             d['image'] = image
             d['mask'] = mask
         return d
+
+
+def convert_to_networkx(G, tree):
+    """
+    Function to traverse the bigtree tree and create the NetworkX graph
+    """
+    G.add_node(tree.node_name, position=tree.position, radius=tree.radius)
+
+    if tree.parent is not None:
+        G.add_edge(tree.parent.node_name, tree.node_name)
+
+    for child in tree.children:
+        convert_to_networkx(G, child)
+
+    return G

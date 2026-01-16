@@ -31,9 +31,9 @@ Tubular structures with tree topology, such as blood vessels, lung airways, and 
 1. Download the [Synthetic Vessel Dataset](https://github.com/giesekow/deepvesselnet/wiki/Datasets/) to `./Trexplorer/data`.
 2. Use the provided preprocessing script to convert the data into the required annotation format [[example](https://github.com/RomStriker/Trexplorer/blob/abfb2296743d5c734476865aff732a7abed13936/docs/example_annotation.pickle)] as below:
     ```
-    python ./Trexplorer/src/trackformer/datasets/utils/preprocess_synthetic_dataset.py ./Trexplorer/data
+    python ./Trexplorer/src/trexplorer/datasets/preprocess_synthetic_dataset.py ./Trexplorer/data
     ``` 
-4. Running the script above should give you the following data directory structure:
+3. Running the script above should give you the following data directory structure:
     ```
     Trexplorer
     ├── data

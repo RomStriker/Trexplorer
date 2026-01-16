@@ -31,18 +31,18 @@ def train(args: Namespace) -> None:
     if args.resume:
         args = restore_config(args)
 
-    logger = utils.setup_logger(args)
-
-    if args.distributed:
-        utils.init_distributed_mode(args)
-        logger.info(f"git:\n  {utils.get_sha()}\n")
-
     output_dir = Path(args.output_dir)
     if args.output_dir:
         output_dir.mkdir(parents=True, exist_ok=True)
         yaml.dump(
             vars(args),
             open(output_dir / 'config.yaml', 'w'), allow_unicode=True)
+
+    logger = utils.setup_logger(args)
+
+    if args.distributed:
+        utils.init_distributed_mode(args)
+        logger.info(f"git:\n  {utils.get_sha()}\n")
 
     device = torch.device(args.device)
 
@@ -181,7 +181,7 @@ def train(args: Namespace) -> None:
         if not (args.resume and epoch == start_epoch):
             st = time.time()
             metrics = engine_trx.train_one_epoch(model, criterion, data_loader_train,
-                                                 optimizer, lr_scheduler, scaler, logger)
+                                                 optimizer, lr_scheduler, scaler)
             et = time.time()
             elapsed_time = et - st
 

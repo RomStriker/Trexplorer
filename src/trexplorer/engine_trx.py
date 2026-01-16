@@ -143,7 +143,8 @@ class Trexplorer:
                                    radius=target['radii'][0][0],
                                    label=target['labels'][0][0],
                                    level=0, rel_pos=[0, 0, 0],
-                                   query_index=-1, step=-1, score=1.0)
+                                   query_index=-1, step=-1, score=1.0,
+                                   bifur_parent=None)
         return node_batch
 
     @staticmethod
@@ -496,7 +497,7 @@ class Trexplorer:
             next_step.append(next_step_node)
 
     @staticmethod
-    def init_req_lists(self, indices, pred_tree, curr_step, selected_queries,
+    def init_req_lists(indices, pred_tree, curr_step, selected_queries,
                        node_finished_branches, finished_branches_end_nodes):
         """
         Initialize the required lists
@@ -554,7 +555,7 @@ class Trexplorer:
                     for level_node_i in range(0, len(curr_level), self.args.batch_size_per_sample):
                         node_batch = curr_level[level_node_i: level_node_i + self.args.batch_size_per_sample]
                         sub_vol_batch, past_traj_pos_batch = self.get_sub_vol_and_past_tr(node_batch, samples,
-                                                                                          pred_tree, samples_min, crop_pad)
+                                                                                          pred_tree, crop_pad)
                         if not len(sub_vol_batch):
                             continue
 
@@ -651,7 +652,8 @@ class Trexplorer:
                                         bifur_dict = prev_step_info['bifur_list'][sq_i]
                                         self.add_new_bifur_branches_points(bifur_dict, pred_tree, new_branches, curr_step, finished_branches_end_nodes,
                                                                            global_branch_id, query_positions, query_radii, curr_node_root_pos, level, step,
-                                                                           query_classes_scores, global_occ_pos, next_step, node_perma_finished_branches, query_classes)
+                                                                           query_classes_scores, global_occ_pos, next_step, node_perma_finished_branches,
+                                                                           query_classes, selected_queries)
 
                                 curr_step = next_step
                                 indices = self.get_updated_indices_nx(indices, curr_step, pred_tree)

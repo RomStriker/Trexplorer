@@ -8,14 +8,15 @@ import monai
 import numpy as np
 sys.setrecursionlimit(10000)
 
-from monai.data import CacheDataset, SmartCacheDataset, partition_dataset, Dataset
+from monai.data import CacheDataset, SmartCacheDataset, partition_dataset
 from src.trexplorer.util.misc import is_main_process, get_world_size, get_rank, init_distributed_mode, get_sha
-from monai.data import ThreadDataLoader, DataLoader
+from monai.data import ThreadDataLoader
 from src.trexplorer.datasets.transforms import (LoadAnnotPickled,
                                                 CropAndPadd,
                                                 ExtRandomSubTreed,
                                                 ConvertTreeToTargetsd,
-                                                LoadImageCropsAndTreesd)
+                                                LoadImageCropsAndTreesd,
+                                                ComputeImageRanged)
 
 from monai.transforms import (
     LoadImaged,
@@ -57,6 +58,7 @@ def build_training_transforms(cfg):
     transforms = [LoadImaged(keys=["image"], image_only=True),
                   EnsureChannelFirstd(keys=["image"], channel_dim="no_channel"),
                   ScaleIntensityd(keys=['image'], minv=-1.0),
+                  ComputeImageRanged(keys=["image"]),
                   LoadAnnotPickled(keys=["label"]),]
 
     if cfg.mask:
@@ -99,6 +101,7 @@ def build_validation_transforms(cfg):
     transforms = [LoadImaged(keys=["image"], image_only=True),
                   EnsureChannelFirstd(keys=["image"], channel_dim="no_channel"),
                   ScaleIntensityd(keys=['image'], minv=-1.0),
+                  ComputeImageRanged(keys=["image"]),
                   ToTensord(keys=["image"], track_meta=False),
                   LoadAnnotPickled(keys=["label"])]
 
@@ -253,18 +256,23 @@ def val_collate_fn(batch):
     images = []
     targets = []
     masks = []
+    images_min = []
 
     for sample in batch:
         images.append(torch.unsqueeze(sample['image'], 0))
+        images_min.append(torch.unsqueeze(sample['image_min'], 0))
         label = {'seq_tree': sample['label']['branches'],
                  'index': sample['label']['index'],
                  'bifur_ids': sample['label']['bifur_ids']}
+        if 'networkx' in sample['label']:
+            label['networkx'] = sample['label']['networkx']
         targets.append(label)
         if isinstance(sample['mask'], torch.Tensor):
             masks.append(torch.unsqueeze(sample['mask'], 0))
 
     images_batch = torch.cat(images, dim=0)
     images_batch = images_batch.contiguous()
+    images_min_batch = torch.cat(images_min, dim=0)
 
     if isinstance(sample['mask'], torch.Tensor):
         masks_batch = torch.cat(masks, dim=0)
@@ -273,7 +281,7 @@ def val_collate_fn(batch):
     else:
         masks_batch = None
 
-    batch_output = {"image": images_batch, "label": targets, "mask": masks_batch}
+    batch_output = {"image": images_batch, "image_min": images_min_batch, "label": targets, "mask": masks_batch}
 
     return batch_output
 
