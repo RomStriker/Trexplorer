@@ -1,5 +1,6 @@
 # Trexplorer: Recurrent DETR for Topologically Correct Tree Centerline Tracking
 
+#### Note: Try the new and improved version [Trexplorer Super: Topologically Correct Centerline Tree Tracking of Tubular Objects in CT Volumes](https://papers.miccai.org/miccai-2025/paper/0795_paper.pdf) at [Trexplorer Super](https://github.com/RomStriker/Trexplorer-Super).
 This repository provides the official implementation of the [Trexplorer: Recurrent DETR for Topologically Correct Tree Centerline Tracking]([https://github.com/RomStriker/Trexplorer](https://link.springer.com/chapter/10.1007/978-3-031-72120-5_69)) paper by [Roman Naeem](https://research.chalmers.se/en/person/nroman), [David Hagerman](https://research.chalmers.se/en/person/olzond), [Lennart Svensson](https://research.chalmers.se/person/pale) and [Fredrik Kahl](https://www.chalmers.se/personer/kahlf/). The codebase builds upon [DETR](https://github.com/facebookresearch/detr) and [Trackformer](https://github.com/timmeinhardt/trackformer).
 
 <div align="center">
